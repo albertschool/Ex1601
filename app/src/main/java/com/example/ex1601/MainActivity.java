@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -22,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
         eT=(EditText)findViewById(R.id.eT);
 
+        setLevel=20;
         broadcastBat = new BroadcastBattery();
 
     }
@@ -40,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
     public void btn(View view) {
         String st=eT.getText().toString();
         setLevel=Integer.parseInt(st);
-        Toast.makeText(this, ""+setLevel, Toast.LENGTH_SHORT).show();
+        SharedPreferences settings=getSharedPreferences("PREFS_NAME",MODE_PRIVATE);
+        SharedPreferences.Editor editor=settings.edit();
+        editor.putInt("setLevel",setLevel);
+        editor.commit();
     }
 }
