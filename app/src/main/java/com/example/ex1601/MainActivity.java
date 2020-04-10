@@ -12,18 +12,22 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    EditText eT;
+    EditText eThighlevel, eTlowlevel;
+
     BroadcastBattery broadcastBat;
-    int setLevel;
+    int sethighLevel, setlowLevel;
+    String sthighlevel, stlowlevel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        eT=(EditText)findViewById(R.id.eT);
+        eThighlevel=(EditText)findViewById(R.id.eThighlevel);
+        eTlowlevel=(EditText)findViewById(R.id.eTlowlevel);
 
-        setLevel=20;
+        sethighLevel=30;
+        setlowLevel=20;
         broadcastBat = new BroadcastBattery();
 
     }
@@ -40,11 +44,22 @@ public class MainActivity extends AppCompatActivity {
         unregisterReceiver(broadcastBat); }
 
     public void btn(View view) {
-        String st=eT.getText().toString();
-        setLevel=Integer.parseInt(st);
-        SharedPreferences settings=getSharedPreferences("PREFS_NAME",MODE_PRIVATE);
-        SharedPreferences.Editor editor=settings.edit();
-        editor.putInt("setLevel",setLevel);
-        editor.commit();
+        sthighlevel=eThighlevel.getText().toString();
+        stlowlevel=eTlowlevel.getText().toString();
+        if (sthighlevel.isEmpty() || stlowlevel.isEmpty()) {
+            Toast.makeText(this, "The default levels will be applied !", Toast.LENGTH_SHORT).show();
+        } else {
+            sethighLevel=Integer.parseInt(sthighlevel);
+            setlowLevel=Integer.parseInt(stlowlevel);
+            if (sethighLevel<=0 || setlowLevel<=0 || sethighLevel<=setlowLevel) {
+                Toast.makeText(this, "The high level have to be bigger the the lower level\nPlease correct !", Toast.LENGTH_SHORT).show();
+            } else {
+                SharedPreferences settings=getSharedPreferences("PREFS_NAME",MODE_PRIVATE);
+                SharedPreferences.Editor editor=settings.edit();
+                editor.putInt("sethighLevel",sethighLevel);
+                editor.putInt("setlowLevel",setlowLevel);
+                editor.commit();
+            }
+        }
     }
 }

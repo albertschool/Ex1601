@@ -15,7 +15,7 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="3"
+        android:layout_weight="6"
         android:orientation="vertical">
 
         <Space
@@ -27,9 +27,10 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:gravity="center"
             android:autoSizeTextType="uniform"
-            android:text="Battery level alert" />
+            android:gravity="center"
+            android:text="Battery level alert"
+            android:textStyle="bold" />
 
         <Space
             android:layout_width="match_parent"
@@ -37,13 +38,28 @@
             android:layout_weight="1" />
 
         <EditText
-            android:id="@+id/eT"
+            android:id="@+id/eThighlevel"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:ems="10"
+            android:autoSizeTextType="uniform"
             android:gravity="center"
-            android:hint="Set alert level - default 20%"
+            android:hint="Set higher level alert - 30% default"
+            android:inputType="number" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <EditText
+            android:id="@+id/eTlowlevel"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:autoSizeTextType="uniform"
+            android:gravity="center"
+            android:hint="Set lower level alert - 20% default"
             android:inputType="number" />
 
         <Space
@@ -52,16 +68,18 @@
             android:layout_weight="1" />
 
         <Button
-            android:onClick="btn"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:text="Set Alert" />
+            android:autoSizeTextType="uniform"
+            android:onClick="btn"
+            android:text="Set Alerts !"
+            android:textAllCaps="false" />
 
         <Space
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="4" />
+            android:layout_weight="3" />
     </LinearLayout>
 
     <Space
