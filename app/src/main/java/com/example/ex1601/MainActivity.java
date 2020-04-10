@@ -26,8 +26,12 @@ public class MainActivity extends AppCompatActivity {
         eThighlevel=(EditText)findViewById(R.id.eThighlevel);
         eTlowlevel=(EditText)findViewById(R.id.eTlowlevel);
 
-        sethighLevel=30;
-        setlowLevel=20;
+        SharedPreferences settings=this.getSharedPreferences("PREFS_NAME",MODE_PRIVATE);
+        sethighLevel=settings.getInt("sethighLevel",30);
+        setlowLevel=settings.getInt("setlowLevel",20);
+
+        eThighlevel.setHint(""+sethighLevel);
+        eTlowlevel.setHint(""+setlowLevel);
         broadcastBat = new BroadcastBattery();
 
     }
@@ -41,7 +45,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override protected void onStop() {
         super.onStop();
-        unregisterReceiver(broadcastBat); }
+
+        unregisterReceiver(broadcastBat);
+    }
 
     public void btn(View view) {
         sthighlevel=eThighlevel.getText().toString();

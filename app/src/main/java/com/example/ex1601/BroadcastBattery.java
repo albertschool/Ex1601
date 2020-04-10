@@ -13,41 +13,60 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class BroadcastBattery extends BroadcastReceiver {
 
-    private boolean msgFlag;
-    int level;
+    private boolean highmsgFlag, lowmsgFlag;
+    int highlevel, lowlevel;
     AlertDialog.Builder adb;
 
     public BroadcastBattery() {
-        msgFlag=false;
+        lowmsgFlag = false;
+        highmsgFlag = false;
     }
 
     @Override
     public void onReceive(Context context, Intent ri) {
-        SharedPreferences settings=context.getSharedPreferences("PREFS_NAME",MODE_PRIVATE);
-        level=settings.getInt("setLevel",20);
+        SharedPreferences settings = context.getSharedPreferences("PREFS_NAME", MODE_PRIVATE);
+        highlevel = settings.getInt("sethighLevel", 30);
+        lowlevel = settings.getInt("setlowLevel", 20);
 
-        int batLevel = ri.getIntExtra(BatteryManager.EXTRA_LEVEL,-1);
-        int batStatus = ri.getIntExtra(BatteryManager.EXTRA_STATUS,-1);
-        if (batLevel<=level) {
-            if (!msgFlag && batStatus!=BatteryManager.BATTERY_STATUS_CHARGING) {
-                msgFlag=true;
-
-                adb=new AlertDialog.Builder(context);
-                adb.setTitle("Low battery alarm");
-                adb.setMessage("Low battery level: "+batLevel+"%\nPlease charge !");
-                adb.setCancelable(false);
-                adb.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
+        int batLevel = ri.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+        int batStatus = ri.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
+        if (batStatus != BatteryManager.BATTERY_STATUS_CHARGING) {
+            if (batLevel <= highlevel) {
+                if (!highmsgFlag) {
+                    highmsgFlag = true;
+                    adb = new AlertDialog.Builder(context);
+                    adb.setTitle("1st Low battery alarm !");
+                    adb.setMessage("Low battery level: " + batLevel + "%\nPlease charge !");
+                    adb.setCancelable(false);
+                    adb.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    AlertDialog ad = adb.create();
+                    ad.show();
+                } else if (batLevel <= lowlevel) {
+                    if (!lowmsgFlag) {
+                        lowmsgFlag=true;
+                        adb=new AlertDialog.Builder(context);
+                        adb.setTitle("2nd Low battery alarm !!!");
+                        adb.setMessage("Low battery level: "+batLevel+"%\nPlease charge now !!!");
+                        adb.setCancelable(false);
+                        adb.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        AlertDialog ad=adb.create();
+                        ad.show();
                     }
-                });
-                AlertDialog ad=adb.create();
-                ad.show();
-//                ad.getWindow().setType(WindowManager.LayoutParams.TYPE_TOAST);
+                }
             }
-        } else if (msgFlag) {
-            msgFlag=false;
+        } else if (highmsgFlag || lowmsgFlag) { // charging !
+            highmsgFlag = false;
+            lowmsgFlag = false;
         }
     }
 }
