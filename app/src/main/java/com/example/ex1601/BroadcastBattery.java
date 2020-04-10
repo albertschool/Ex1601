@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.BatteryManager;
+import android.view.WindowManager;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -30,6 +31,7 @@ public class BroadcastBattery extends BroadcastReceiver {
         if (batLevel<=level) {
             if (!msgFlag && batStatus!=BatteryManager.BATTERY_STATUS_CHARGING) {
                 msgFlag=true;
+
                 adb=new AlertDialog.Builder(context);
                 adb.setTitle("Low battery alarm");
                 adb.setMessage("Low battery level: "+batLevel+"%\nPlease charge !");
@@ -42,6 +44,7 @@ public class BroadcastBattery extends BroadcastReceiver {
                 });
                 AlertDialog ad=adb.create();
                 ad.show();
+//                ad.getWindow().setType(WindowManager.LayoutParams.TYPE_TOAST);
             }
         } else if (msgFlag) {
             msgFlag=false;
