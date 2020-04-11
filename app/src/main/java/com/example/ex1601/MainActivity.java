@@ -72,17 +72,22 @@ public class MainActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onStart() {
+        super.onStart();
 
         registerReceiver(broadcastBat,new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onDestroy() {
+        super.onDestroy();
 
         unregisterReceiver(broadcastBat);
+    }
+
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
     }
 
     public void btn(View view) {
@@ -91,5 +96,6 @@ public class MainActivity extends AppCompatActivity {
         editor.putInt("sethighLevel",sethighLevel);
         editor.putInt("setlowLevel",setlowLevel);
         editor.commit();
+        moveTaskToBack(true);
     }
 }
