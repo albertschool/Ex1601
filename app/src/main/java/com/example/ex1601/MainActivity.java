@@ -8,33 +8,68 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import static java.lang.Math.round;
 
 public class MainActivity extends AppCompatActivity {
 
-    EditText eThighlevel, eTlowlevel;
+    TextView tVhighlevel, tVlowlevel;
+    SeekBar sBhighlevel, sBlowlevel;
 
     BroadcastBattery broadcastBat;
-    int sethighLevel, setlowLevel;
-    String sthighlevel, stlowlevel;
+    int maxlevel, minlevel, sethighLevel, setlowLevel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        eThighlevel=(EditText)findViewById(R.id.eThighlevel);
-        eTlowlevel=(EditText)findViewById(R.id.eTlowlevel);
+        tVhighlevel=(TextView) findViewById(R.id.tVhighlevel);
+        sBhighlevel=(SeekBar) findViewById(R.id.sBhighlevel);
+        tVlowlevel=(TextView) findViewById(R.id.tVlowlevel);
+        sBlowlevel=(SeekBar) findViewById(R.id.sBlowlevel);
+
+        maxlevel=90;
+        minlevel=15;
 
         SharedPreferences settings=this.getSharedPreferences("PREFS_NAME",MODE_PRIVATE);
         sethighLevel=settings.getInt("sethighLevel",30);
         setlowLevel=settings.getInt("setlowLevel",20);
 
-        eThighlevel.setHint(""+sethighLevel);
-        eTlowlevel.setHint(""+setlowLevel);
+        tVhighlevel.setText(""+sethighLevel);
+        sBhighlevel.setProgress((int) (1.25*(sethighLevel-minlevel)));
+        sBhighlevel.setOnSeekBarChangeListener(SBCL);
+        tVlowlevel.setText(""+setlowLevel);
+        sBlowlevel.setProgress((int) (1.25*(setlowLevel-minlevel)));
+        sBlowlevel.setOnSeekBarChangeListener(SBCL);
         broadcastBat = new BroadcastBattery();
 
     }
+
+    SeekBar.OnSeekBarChangeListener SBCL=new SeekBar.OnSeekBarChangeListener() {
+        @Override
+        public void onProgressChanged(SeekBar sB, int prog, boolean fromUser) {
+            if (sB==sBhighlevel) {
+                sethighLevel=((int) (0.8*prog+minlevel));
+                tVhighlevel.setText(""+sethighLevel);
+            } else {
+                setlowLevel=((int) (0.8*prog+minlevel));
+                tVlowlevel.setText(""+setlowLevel);
+            }
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+        }
+    };
+
 
     @Override
     protected void onResume() {
@@ -43,29 +78,18 @@ public class MainActivity extends AppCompatActivity {
         registerReceiver(broadcastBat,new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
     }
 
-    @Override protected void onStop() {
+    @Override
+    protected void onStop() {
         super.onStop();
 
         unregisterReceiver(broadcastBat);
     }
 
     public void btn(View view) {
-        sthighlevel=eThighlevel.getText().toString();
-        stlowlevel=eTlowlevel.getText().toString();
-        if (sthighlevel.isEmpty() || stlowlevel.isEmpty()) {
-            Toast.makeText(this, "The default levels will be applied !", Toast.LENGTH_SHORT).show();
-        } else {
-            sethighLevel=Integer.parseInt(sthighlevel);
-            setlowLevel=Integer.parseInt(stlowlevel);
-            if (sethighLevel<=0 || setlowLevel<=0 || sethighLevel<=setlowLevel) {
-                Toast.makeText(this, "The high level have to be bigger the the lower level\nPlease correct !", Toast.LENGTH_SHORT).show();
-            } else {
-                SharedPreferences settings=getSharedPreferences("PREFS_NAME",MODE_PRIVATE);
-                SharedPreferences.Editor editor=settings.edit();
-                editor.putInt("sethighLevel",sethighLevel);
-                editor.putInt("setlowLevel",setlowLevel);
-                editor.commit();
-            }
-        }
+        SharedPreferences settings=getSharedPreferences("PREFS_NAME",MODE_PRIVATE);
+        SharedPreferences.Editor editor=settings.edit();
+        editor.putInt("sethighLevel",sethighLevel);
+        editor.putInt("setlowLevel",setlowLevel);
+        editor.commit();
     }
 }
