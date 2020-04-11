@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.SeekBar;
@@ -36,8 +38,8 @@ public class MainActivity extends AppCompatActivity {
         minlevel=15;
 
         SharedPreferences settings=this.getSharedPreferences("PREFS_NAME",MODE_PRIVATE);
-        sethighLevel=settings.getInt("sethighLevel",30);
-        setlowLevel=settings.getInt("setlowLevel",20);
+        sethighLevel=settings.getInt("sethighLevel",40);
+        setlowLevel=settings.getInt("setlowLevel",30);
 
         tVhighlevel.setText(""+sethighLevel);
         sBhighlevel.setProgress((int) (1.25*(sethighLevel-minlevel)));
@@ -98,4 +100,20 @@ public class MainActivity extends AppCompatActivity {
         editor.commit();
         moveTaskToBack(true);
     }
+
+    public boolean onCreateOptionsMenu (Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    public boolean onOptionsItemSelected (MenuItem item) {
+        int id=item.getItemId();
+        if (id==R.id.menuCredits) {
+//            finish();
+        } else {
+            finish();
+        }
+        return true;
+    }
+
 }
