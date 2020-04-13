@@ -76,7 +76,7 @@
             android:layout_weight="1"
             android:autoSizeTextType="uniform"
             android:gravity="center"
-            android:text="Set higher level alert - 30% default" />
+            android:text="Set higher level alert - 40% default" />
 
         <Space
             android:layout_width="match_parent"
@@ -122,7 +122,7 @@
             android:layout_weight="1"
             android:autoSizeTextType="uniform"
             android:gravity="center"
-            android:text="Set lower level alert - 20% default" />
+            android:text="Set lower level alert - 30% default" />
 
         <Space
             android:layout_width="match_parent"
@@ -135,7 +135,7 @@
             android:layout_weight="1"
             android:autoSizeTextType="uniform"
             android:onClick="btn"
-            android:text="Set Alerts !"
+            android:text="Set alerts and Close"
             android:textAllCaps="false" />
 
         <Space

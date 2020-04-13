@@ -24,14 +24,12 @@ public class BroadcastBattery extends BroadcastReceiver {
     private boolean highmsgFlag, lowmsgFlag;
     int highlevel, lowlevel;
     String st;
-    AlertDialog.Builder adb;
 
     public BroadcastBattery() {
         lowmsgFlag = false;
         highmsgFlag = false;
     }
 
-//    @SuppressLint("WrongConstant")
     @Override
     public void onReceive(Context context, Intent ri) {
         SharedPreferences settings = context.getSharedPreferences("PREFS_NAME", MODE_PRIVATE);
@@ -44,95 +42,40 @@ public class BroadcastBattery extends BroadcastReceiver {
             if (batLevel <= highlevel) {
                 if (!highmsgFlag) {
                     highmsgFlag = true;
-
                     st="Low battery level: " + batLevel + "%\nPlease charge !";
-                    NotificationCompat.Builder builder = new NotificationCompat.Builder(
-                            context)
-                            // Set Icon
+                    NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                             .setSmallIcon(R.drawable.bat_alarm)
-                            // Set Ticker Message
                             .setTicker("ticker")
-                            // Set Title
                             .setContentTitle("Low battery alarm !")
-                            // Set Text
                             .setContentText(st)
-                            // Add an Action Button below Notification
-                            //.addAction(R.drawable.ic_launcher, "Action Button", pIntent)
-                            // Set PendingIntent into Notification
-                            //.setContentIntent(pIntent)
-                            // Dismiss Notification
+                            .setPriority(NotificationCompat.PRIORITY_HIGH)
                             .setAutoCancel(false);
                     NotificationManager notificationmanager = (NotificationManager) context
                             .getSystemService(Context.NOTIFICATION_SERVICE);
-                    // Build Notification with Notification Manager
                     notificationmanager.notify(0, builder.build());
                     Toast toast=Toast. makeText(context,st,Toast. LENGTH_LONG);
                     toast.setGravity(Gravity.CENTER,0,0);
                     toast. show();
-//                    Toast.makeText(context, (st), Toast.LENGTH_LONG).show();
-
-/*
-                    adb = new AlertDialog.Builder(context);
-                    adb.setTitle("1st Low battery alarm !");
-                    adb.setIcon(R.drawable.bat_alarm);
-                    adb.setMessage("Low battery level: " + batLevel + "%\nPlease charge !");
-                    adb.setCancelable(false);
-                    adb.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-                    AlertDialog ad = adb.create();
-                    ad.show();*/
                 } else if (batLevel <= lowlevel) {
                     if (!lowmsgFlag) {
                         lowmsgFlag=true;
-
                         st="Low battery level: " + batLevel + "%\nPlease charge now !!!";
-                        NotificationCompat.Builder builder = new NotificationCompat.Builder(
-                                context)
-                                // Set Icon
+                        NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                                 .setSmallIcon(R.drawable.bat_alarm)
-                                // Set Ticker Message
                                 .setTicker("ticker")
-                                // Set Title
                                 .setContentTitle("Low battery alarm !!!")
-                                // Set Text
                                 .setContentText(st)
-                                // Add an Action Button below Notification
-                                //.addAction(R.drawable.ic_launcher, "Action Button", pIntent)
-                                // Set PendingIntent into Notification
-                                //.setContentIntent(pIntent)
-                                // Dismiss Notification
                                 .setAutoCancel(false);
                         NotificationManager notificationmanager = (NotificationManager) context
                                 .getSystemService(Context.NOTIFICATION_SERVICE);
-                        // Build Notification with Notification Manager
                         notificationmanager.notify(0, builder.build());
                         Toast toast=Toast. makeText(context,st,Toast. LENGTH_LONG);
                         toast.setGravity(Gravity.CENTER,0,0);
                         toast. show();
-//                        Toast.makeText(context, (st), Toast.LENGTH_LONG).show();
-
-/*
-                        adb=new AlertDialog.Builder(context);
-                        adb.setTitle("2nd Low battery alarm !!!");
-                        adb.setIcon(R.drawable.bat_alarm);
-                        adb.setMessage("Low battery level: "+batLevel+"%\nPlease charge now !!!");
-                        adb.setCancelable(false);
-                        adb.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-                        AlertDialog ad=adb.create();
-                        ad.show();*/
                     }
                 }
             }
-        } else if (highmsgFlag || lowmsgFlag) { // charging !
+        } else if (highmsgFlag || lowmsgFlag) { // only if charging !
             highmsgFlag = false;
             lowmsgFlag = false;
         }

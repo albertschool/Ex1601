@@ -1,7 +1,5 @@
 package com.example.ex1601;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -9,13 +7,20 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import static java.lang.Math.round;
+import androidx.appcompat.app.AppCompatActivity;
 
+/**
+ * @author		Albert Levy <albert.school2015@gmail.com>
+ * @version     3.0
+ * @since		13/01/2020
+ * Basic application to demonstrate:
+ * 1. Battery broadcast receiver
+ * 2. Boot broadcast receiver
+ * 3. Notifications
+ */
 public class MainActivity extends AppCompatActivity {
 
     TextView tVhighlevel, tVlowlevel;
@@ -62,11 +67,9 @@ public class MainActivity extends AppCompatActivity {
                 tVlowlevel.setText(""+setlowLevel);
             }
         }
-
         @Override
         public void onStartTrackingTouch(SeekBar seekBar) {
         }
-
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {
         }
@@ -92,6 +95,12 @@ public class MainActivity extends AppCompatActivity {
         moveTaskToBack(true);
     }
 
+    /**
+     * Saving preferred battery precentage alert to SharedPref file &
+     * passing the activity back
+     * <p>
+     * @param view
+     */
     public void btn(View view) {
         SharedPreferences settings=getSharedPreferences("PREFS_NAME",MODE_PRIVATE);
         SharedPreferences.Editor editor=settings.edit();
@@ -109,11 +118,10 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected (MenuItem item) {
         int id=item.getItemId();
         if (id==R.id.menuCredits) {
-//            finish();
+//            credits...
         } else {
             finish();
         }
         return true;
     }
-
 }
