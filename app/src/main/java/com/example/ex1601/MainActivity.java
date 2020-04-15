@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         tVlowlevel=(TextView) findViewById(R.id.tVlowlevel);
         sBlowlevel=(SeekBar) findViewById(R.id.sBlowlevel);
 
-        maxlevel=90;
+        maxlevel=95;
         minlevel=15;
 
         SharedPreferences settings=this.getSharedPreferences("PREFS_NAME",MODE_PRIVATE);
@@ -47,23 +47,26 @@ public class MainActivity extends AppCompatActivity {
         setlowLevel=settings.getInt("setlowLevel",30);
 
         tVhighlevel.setText(""+sethighLevel);
-        sBhighlevel.setProgress((int) (1.25*(sethighLevel-minlevel)));
+        sBhighlevel.setProgress((int) ((100/(maxlevel-minlevel))*(sethighLevel-minlevel)));
         sBhighlevel.setOnSeekBarChangeListener(SBCL);
         tVlowlevel.setText(""+setlowLevel);
-        sBlowlevel.setProgress((int) (1.25*(setlowLevel-minlevel)));
+        sBlowlevel.setProgress((int) ((100/(maxlevel-minlevel))*(setlowLevel-minlevel)));
         sBlowlevel.setOnSeekBarChangeListener(SBCL);
         broadcastBat = new BroadcastBattery();
 
     }
 
+    /**
+     * Setting a seekbar listener to get & display the battery percentage preferred
+     */
     SeekBar.OnSeekBarChangeListener SBCL=new SeekBar.OnSeekBarChangeListener() {
         @Override
         public void onProgressChanged(SeekBar sB, int prog, boolean fromUser) {
             if (sB==sBhighlevel) {
-                sethighLevel=((int) (0.8*prog+minlevel));
+                sethighLevel=((int) (((maxlevel-minlevel)/100)*prog+minlevel));
                 tVhighlevel.setText(""+sethighLevel);
             } else {
-                setlowLevel=((int) (0.8*prog+minlevel));
+                setlowLevel=((int) (((maxlevel-minlevel)/100)*prog+minlevel));
                 tVlowlevel.setText(""+setlowLevel);
             }
         }
@@ -75,7 +78,9 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-
+    /**
+     * Register the battery status receiver as application start
+     */
     @Override
     protected void onStart() {
         super.onStart();
@@ -83,6 +88,9 @@ public class MainActivity extends AppCompatActivity {
         registerReceiver(broadcastBat,new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
     }
 
+    /**
+     * Unregister the battery status receiver if application ended
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -90,6 +98,9 @@ public class MainActivity extends AppCompatActivity {
         unregisterReceiver(broadcastBat);
     }
 
+    /**
+     * Moving the activity to background if Back button pressed
+     */
     @Override
     public void onBackPressed() {
         moveTaskToBack(true);
@@ -110,11 +121,21 @@ public class MainActivity extends AppCompatActivity {
         moveTaskToBack(true);
     }
 
+    /**
+     * Show menu options
+     * <p>
+     * @param menu
+     */
     public boolean onCreateOptionsMenu (Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
+    /**
+     * Respond to the menu item selected
+     * <p>
+     * @param item
+     */
     public boolean onOptionsItemSelected (MenuItem item) {
         int id=item.getItemId();
         if (id==R.id.menuCredits) {
