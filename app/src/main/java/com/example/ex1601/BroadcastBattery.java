@@ -2,8 +2,10 @@ package com.example.ex1601;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -17,6 +19,7 @@ import android.widget.Toast;
 import androidx.core.app.NotificationCompat;
 
 import static android.content.Context.MODE_PRIVATE;
+import static android.content.Context.NOTIFICATION_SERVICE;
 import static androidx.core.content.ContextCompat.getSystemService;
 
 public class BroadcastBattery extends BroadcastReceiver {
@@ -43,16 +46,15 @@ public class BroadcastBattery extends BroadcastReceiver {
                 if (!highmsgFlag) {
                     highmsgFlag = true;
                     st="Low battery level: " + batLevel + "%\nPlease charge !";
-                    NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
+                    NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                    Notification noti=new Notification.Builder(context)
                             .setSmallIcon(R.drawable.bat_alarm)
-                            .setTicker("ticker")
                             .setContentTitle("Low battery alarm !")
                             .setContentText(st)
-                            .setPriority(NotificationCompat.PRIORITY_HIGH)
-                            .setAutoCancel(false);
-                    NotificationManager notificationmanager = (NotificationManager) context
-                            .getSystemService(Context.NOTIFICATION_SERVICE);
-                    notificationmanager.notify(0, builder.build());
+                            .setPriority(Notification.PRIORITY_HIGH)
+                            .setAutoCancel(false)
+                            .build();
+                    nm.notify(0,noti);
                     Toast toast=Toast. makeText(context,st,Toast. LENGTH_LONG);
                     toast.setGravity(Gravity.CENTER,0,0);
                     toast. show();
@@ -60,15 +62,15 @@ public class BroadcastBattery extends BroadcastReceiver {
                     if (!lowmsgFlag) {
                         lowmsgFlag=true;
                         st="Low battery level: " + batLevel + "%\nPlease charge now !!!";
-                        NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
+                        NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                        Notification noti=new Notification.Builder(context)
                                 .setSmallIcon(R.drawable.bat_alarm)
-                                .setTicker("ticker")
                                 .setContentTitle("Low battery alarm !!!")
                                 .setContentText(st)
-                                .setAutoCancel(false);
-                        NotificationManager notificationmanager = (NotificationManager) context
-                                .getSystemService(Context.NOTIFICATION_SERVICE);
-                        notificationmanager.notify(0, builder.build());
+                                .setPriority(Notification.PRIORITY_HIGH)
+                                .setAutoCancel(false)
+                                .build();
+                        nm.notify(0,noti);
                         Toast toast=Toast. makeText(context,st,Toast. LENGTH_LONG);
                         toast.setGravity(Gravity.CENTER,0,0);
                         toast. show();

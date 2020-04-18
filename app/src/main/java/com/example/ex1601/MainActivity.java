@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -47,10 +48,10 @@ public class MainActivity extends AppCompatActivity {
         setlowLevel=settings.getInt("setlowLevel",30);
 
         tVhighlevel.setText(""+sethighLevel);
-        sBhighlevel.setProgress((int) ((100/(maxlevel-minlevel))*(sethighLevel-minlevel)));
+        sBhighlevel.setProgress((int) ((float)(100/(maxlevel-minlevel))*(sethighLevel-minlevel)));
         sBhighlevel.setOnSeekBarChangeListener(SBCL);
         tVlowlevel.setText(""+setlowLevel);
-        sBlowlevel.setProgress((int) ((100/(maxlevel-minlevel))*(setlowLevel-minlevel)));
+        sBlowlevel.setProgress((int) ((float)(100/(maxlevel-minlevel))*(setlowLevel-minlevel)));
         sBlowlevel.setOnSeekBarChangeListener(SBCL);
         broadcastBat = new BroadcastBattery();
 
@@ -63,10 +64,10 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onProgressChanged(SeekBar sB, int prog, boolean fromUser) {
             if (sB==sBhighlevel) {
-                sethighLevel=((int) (((maxlevel-minlevel)/100)*prog+minlevel));
+                sethighLevel=(int)((float)(maxlevel-minlevel)*prog/100+minlevel);
                 tVhighlevel.setText(""+sethighLevel);
             } else {
-                setlowLevel=((int) (((maxlevel-minlevel)/100)*prog+minlevel));
+                setlowLevel=(int)((float)(maxlevel-minlevel)*prog/100+minlevel);
                 tVlowlevel.setText(""+setlowLevel);
             }
         }
