@@ -12,6 +12,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.BatteryManager;
+import android.os.Build;
 import android.view.Gravity;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -46,31 +47,69 @@ public class BroadcastBattery extends BroadcastReceiver {
                 if (!highmsgFlag) {
                     highmsgFlag = true;
                     st="Low battery level: " + batLevel + "%\nPlease charge !";
+
                     NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-                    Notification noti=new Notification.Builder(context)
-                            .setSmallIcon(R.drawable.bat_alarm)
-                            .setContentTitle("Low battery alarm !")
-                            .setContentText(st)
-                            .setPriority(Notification.PRIORITY_HIGH)
-                            .setAutoCancel(false)
-                            .build();
-                    nm.notify(0,noti);
+                    NotificationCompat.Builder myNoti = new NotificationCompat.Builder(context.getApplicationContext(), "my_notify");
+                    Intent tmpInt = new Intent(context.getApplicationContext(), BroadcastBattery.class);
+                    PendingIntent pI = PendingIntent.getActivity(context, 0, tmpInt, 0);
+                    NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
+
+                    bigText.setBigContentTitle("Low battery alarm !");
+                    bigText.setSummaryText("Battery level is "+batLevel+"%");
+                    myNoti.setContentIntent(pI);
+                    myNoti.setSmallIcon(R.drawable.bat_alarm);
+                    myNoti.setContentTitle("Low battery alarm !");
+                    myNoti.setContentText(st);
+                    myNoti.setPriority(Notification.PRIORITY_MAX);
+                    myNoti.setStyle(bigText);
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                    {
+                        String channelId = "my_notify";
+                        NotificationChannel channel = new NotificationChannel(
+                                channelId,
+                                "Channel human readable title",
+                                NotificationManager.IMPORTANCE_HIGH);
+                        nm.createNotificationChannel(channel);
+                        myNoti.setChannelId(channelId);
+                    }
+                    nm.notify(0, myNoti.build());
+
                     Toast toast=Toast. makeText(context,st,Toast. LENGTH_LONG);
                     toast.setGravity(Gravity.CENTER,0,0);
                     toast. show();
+
                 } else if (batLevel <= lowlevel) {
                     if (!lowmsgFlag) {
                         lowmsgFlag=true;
                         st="Low battery level: " + batLevel + "%\nPlease charge now !!!";
+
                         NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-                        Notification noti=new Notification.Builder(context)
-                                .setSmallIcon(R.drawable.bat_alarm)
-                                .setContentTitle("Low battery alarm !!!")
-                                .setContentText(st)
-                                .setPriority(Notification.PRIORITY_HIGH)
-                                .setAutoCancel(false)
-                                .build();
-                        nm.notify(0,noti);
+                        NotificationCompat.Builder myNoti = new NotificationCompat.Builder(context.getApplicationContext(), "my_notify");
+                        Intent tmpInt = new Intent(context.getApplicationContext(), BroadcastBattery.class);
+                        PendingIntent pI = PendingIntent.getActivity(context, 0, tmpInt, 0);
+                        NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
+
+                        bigText.setBigContentTitle("Low battery alarm !!!");
+                        bigText.setSummaryText("Battery level is "+batLevel+"%");
+                        myNoti.setContentIntent(pI);
+                        myNoti.setSmallIcon(R.drawable.bat_alarm);
+                        myNoti.setContentTitle("Low battery alarm !!!");
+                        myNoti.setContentText(st);
+                        myNoti.setPriority(Notification.PRIORITY_MAX);
+                        myNoti.setStyle(bigText);
+
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                        {
+                            String channelId = "my_notify";
+                            NotificationChannel channel = new NotificationChannel(
+                                    channelId,
+                                    "Channel human readable title",
+                                    NotificationManager.IMPORTANCE_HIGH);
+                            nm.createNotificationChannel(channel);
+                            myNoti.setChannelId(channelId);
+                        }
+                        nm.notify(0, myNoti.build());
                         Toast toast=Toast. makeText(context,st,Toast. LENGTH_LONG);
                         toast.setGravity(Gravity.CENTER,0,0);
                         toast. show();

@@ -1,8 +1,10 @@
 package com.example.ex1601;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,6 +14,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 /**
  * @author		Albert Levy <albert.school2015@gmail.com>
@@ -53,6 +57,33 @@ public class MainActivity extends AppCompatActivity {
         tVlowlevel.setText(""+setlowLevel);
         sBlowlevel.setProgress((int) ((float)(100/(maxlevel-minlevel))*(setlowLevel-minlevel)));
         sBlowlevel.setOnSeekBarChangeListener(SBCL);
+/*
+        // Here, thisActivity is the current activity
+        if (ContextCompat.checkSelfPermission(MainActivity.this,
+                Manifest.permission.BIND_NOTIFICATION_LISTENER_SERVICE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Permission is not granted
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
+                    Manifest.permission.BIND_NOTIFICATION_LISTENER_SERVICE)) {
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+            } else {
+                // No explanation needed; request the permission
+                ActivityCompat.requestPermissions(MainActivity.this,
+                        new String[]{Manifest.permission.BIND_NOTIFICATION_LISTENER_SERVICE},MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        } else {
+            // Permission has already been granted
+        }
+
+*/
         broadcastBat = new BroadcastBattery();
 
     }
